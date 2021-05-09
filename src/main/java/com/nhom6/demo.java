@@ -2,6 +2,7 @@ package com.nhom6;
 
 import java.nio.file.AccessDeniedException;
 
+import org.graphstream.graph.Edge;
 import org.graphstream.graph.Graph;
 import org.graphstream.graph.Node;
 import org.graphstream.graph.implementations.MultiGraph;
@@ -16,12 +17,13 @@ public class demo {
 	Graph graph = new SingleGraph("Đồ thị nhóm 6");
 	Viewer viewer = new SwingViewer(graph, ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
 	ViewPanel viewPanel = (ViewPanel) viewer.addDefaultView(false);
+
 	public demo() {
-		
+
 	}
 
 	public void showGraph(DataInput dataInput) {
-		 System.setProperty("org.graphstream.ui", "swing");
+		System.setProperty("org.graphstream.ui", "swing");
 		graph.setAttribute("ui.stylesheet", styleSheet);
 		graph.setAutoCreate(true);
 		graph.setStrict(false);
@@ -32,26 +34,24 @@ public class demo {
 				graph.addEdge(s, "" + i, "" + arrays, true);
 			}
 		}
-
+		
 		for (Node node : graph) {
 			node.setAttribute("label", node.getId());
 		}
-		
 
 	}
 
 	protected String styleSheet = "node {" + "	shape: circle;" + "	size: 20px;" + "	fill-mode: plain;"
 			+ "	fill-color: white;" + "	stroke-mode: plain;" + "	stroke-color: grey;" + "	stroke-width: 1px;" +
 
-			"}" + "node.marked {" + "	fill-color: red;" + "}" + "edge.marked {" + "	fill-color: green;" + "}";
+			"}" + "node.marked {" + "	fill-color: red;" + "}" + "node.default {" + "	fill-color: white;" + "}"
+			+ "edge.marked {" + "	fill-color: green;" + "}"+ "edge.default {" + "	fill-color: black;" + "}" ;
 
 	public void Display() {
-		
+
 		viewer.enableAutoLayout();
-		
 
 	}
-	
 
 	public void setColorNode(String id) {
 
@@ -60,8 +60,17 @@ public class demo {
 	}
 
 	public void setColorEdge(String id) {
-	
+
 		graph.getEdge(id).setAttribute("ui.class", "marked");
+
+	}
+
+	public void setColorDefault() {
+		
+		for (Node node : graph) {
+			node.setAttribute("ui.class", "default");
+		}
+		graph.edges().forEach(e -> e.setAttribute("ui.class", "default"));
 
 	}
 
@@ -72,6 +81,5 @@ public class demo {
 	public void setViewPanel(ViewPanel viewPanel) {
 		this.viewPanel = viewPanel;
 	}
-	
 
 }
